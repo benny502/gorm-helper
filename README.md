@@ -11,7 +11,7 @@ db.Preload("TeamUser").Where("userId in ?", []int{1, 2, 3}).Find(&user)
 
 //SELECT * FROM `m_team_user` WHERE `m_team_user`.`userId` IN (1,2,3)
 
-```Go
+```
 
 TeamUser的结果会自动填充到User结构体的TeamUser属性中
 
@@ -38,7 +38,7 @@ db.Preload(clause.Associations).Preload("TeamUser.Team").Where("TeamUser.row = ?
 
 // Error 1054: Unknown column 'TeamUser.row' in 'where clause'
 
-```Go
+```
 
 如果我们使用Joins，我们必须自定义一个临时结构体，有没有什么方法能两者兼顾呢？
 
@@ -58,7 +58,7 @@ db.Preload("TeamUser.Team").
 // LEFT JOIN m_team_user ON m_user.id=m_team_user.userId 
 // LEFT JOIN m_team ON m_team_user.teamId=m_team.id WHERE m_user.id in (1,2,3) and m_team_user.role=3
 
-```Go
+```
 
 上面这种方式可以完美解决，代价是多了两条sql语句，我们不用再自定义结构体了，Gorm会帮我们将结果自动填充进User.TeamUser与User.TeamUser.Team里
 
@@ -74,7 +74,7 @@ builder.NewBuilder().
   Where("m_user.id in ?", []int{1, 2, 3}).
   Find(&user)
   
-```Go
+```
 
 这条语句等价于上面的，Builder会自动分析TeamUser与Team的实体类，自动生成Join语句
 
