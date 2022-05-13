@@ -66,7 +66,10 @@ db.Preload("TeamUser.Team").
 
 ```Go
 
-import "github.com/benny502/gorm-helper/builder"
+import (
+    "github.com/benny502/gorm-helper/builder"
+    "github.com/benny502/gorm-helper/associate"
+)
 
 builder.NewBuilder().
   WithAssociate(associate.NewAssociate(&test.User{}, "TeamUser.Team")).
