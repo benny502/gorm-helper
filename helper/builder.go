@@ -59,7 +59,7 @@ func (b *builder) Build(db *gorm.DB) *gorm.DB {
 	}
 
 	if b.opts.preload != nil {
-		tx.Preload(b.opts.preload.GetPreload())
+		tx.Preload(b.opts.preload.GetPreload(), b.opts.preload.GetArgs()...)
 	}
 	return tx
 }
