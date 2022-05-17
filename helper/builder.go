@@ -8,6 +8,7 @@ import (
 type Builder interface {
 	WithWhere(where Where) Builder
 	WithAssociate(associate associate.Associate) Builder
+	WithPreload(preload associate.Preload) Builder
 	Build(db *gorm.DB) *gorm.DB
 }
 
