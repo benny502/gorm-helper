@@ -5,9 +5,13 @@ import (
 	"reflect"
 	"strings"
 
-	"github.com/benny502/gorm-helper/builder"
 	"gorm.io/gorm/schema"
 )
+
+type Associate interface {
+	GetPreload() string
+	GetJoinsString() []string
+}
 
 type associate struct {
 	preload string
@@ -20,21 +24,6 @@ func (assoc *associate) GetPreload() string {
 
 func (assoc *associate) GetJoinsString() []string {
 	return assoc.joins
-}
-
-func NewAssociate(model schema.Tabler, preload string) builder.Associate {
-	preloads := strings.Split(preload, ".")
-	joins = make([]*joinStatement, 0)
-	joinStat := slice(model, preloads[0], preloads[1:]...)
-	joinStr := make([]string, 0)
-	for _, stat := range joinStat {
-		sql := fmt.Sprintf("LEFT JOIN %s ON %s.%s=%s.%s", stat.ForeignTable, stat.TableName, stat.PrimaryField, stat.ForeignTable, stat.ForeignField)
-		joinStr = append(joinStr, sql)
-	}
-	return &associate{
-		preload: preload,
-		joins:   joinStr,
-	}
 }
 
 type joinStatement struct {
@@ -50,6 +39,21 @@ type joinStatement struct {
 }
 
 var joins []*joinStatement
+
+func NewAssociate(model schema.Tabler, preload string) Associate {
+	preloads := strings.Split(preload, ".")
+	joins = make([]*joinStatement, 0)
+	joinStat := slice(model, preloads[0], preloads[1:]...)
+	joinStr := make([]string, 0)
+	for _, stat := range joinStat {
+		sql := fmt.Sprintf("LEFT JOIN %s ON %s.%s=%s.%s", stat.ForeignTable, stat.TableName, stat.PrimaryField, stat.ForeignTable, stat.ForeignField)
+		joinStr = append(joinStr, sql)
+	}
+	return &associate{
+		preload: preload,
+		joins:   joinStr,
+	}
+}
 
 func slice(src schema.Tabler, preload string, others ...string) []*joinStatement {
 	stat := &joinStatement{

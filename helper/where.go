@@ -1,6 +1,11 @@
-package where
+package helper
 
-import "github.com/benny502/gorm-helper/builder"
+type Where interface {
+	Add(query interface{}, elem ...interface{}) Where
+	GetQuery() interface{}
+	GetArgs() []interface{}
+	Next() bool
+}
 
 type condition struct {
 	query interface{}
@@ -25,7 +30,7 @@ func (w *where) Next() bool {
 	return w.index < len(w.con)
 }
 
-func (w *where) Add(query interface{}, elem ...interface{}) builder.Where {
+func (w *where) Add(query interface{}, elem ...interface{}) Where {
 	w.con = append(w.con, &condition{
 		query: query,
 		args:  elem,
@@ -33,7 +38,7 @@ func (w *where) Add(query interface{}, elem ...interface{}) builder.Where {
 	return w
 }
 
-func NewWhere() builder.Where {
+func NewWhere() Where {
 	return &where{
 		index: -1,
 		con:   []*condition{},

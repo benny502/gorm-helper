@@ -66,12 +66,7 @@ db.Preload("TeamUser.Team").
 
 ```Go
 
-import (
-    "github.com/benny502/gorm-helper/builder"
-    "github.com/benny502/gorm-helper/associate"
-)
-
-builder.NewBuilder().
+helper.NewBuilder().
   WithAssociate(associate.NewAssociate(&test.User{}, "TeamUser.Team")).
   Build(db).
   Where("m_user.id in ?", []int{1, 2, 3}).

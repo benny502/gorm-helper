@@ -4,12 +4,12 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/benny502/gorm-helper/where"
+	"github.com/benny502/gorm-helper/helper"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestWhere(t *testing.T) {
-	where := where.NewWhere()
+	where := helper.NewWhere()
 	where.Add("m_user.id in ?", []int{1, 2, 3})
 	where.Add("m_user.userName like ?", "%admin%")
 	for where.Next() {

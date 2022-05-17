@@ -1,18 +1,20 @@
-package builder
+package helper
 
 import (
+	"github.com/benny502/gorm-helper/associate"
 	"gorm.io/gorm"
 )
 
-type options struct {
-	where     Where
-	associate Associate
-}
-
 type Builder interface {
 	WithWhere(where Where) Builder
-	WithAssociate(associate Associate) Builder
+	WithAssociate(associate associate.Associate) Builder
 	Build(db *gorm.DB) *gorm.DB
+}
+
+type options struct {
+	where     Where
+	associate associate.Associate
+	preload   associate.Preload
 }
 
 type builder struct {
@@ -24,8 +26,13 @@ func (b builder) WithWhere(where Where) Builder {
 	return &b
 }
 
-func (b builder) WithAssociate(associate Associate) Builder {
+func (b builder) WithAssociate(associate associate.Associate) Builder {
 	b.opts.associate = associate
+	return &b
+}
+
+func (b builder) WithPreload(preload associate.Preload) Builder {
+	b.opts.preload = preload
 	return &b
 }
 
@@ -49,21 +56,13 @@ func (b *builder) Build(db *gorm.DB) *gorm.DB {
 			tx.Joins(join)
 		}
 	}
+
+	if b.opts.preload != nil {
+		tx.Preload(b.opts.preload.GetPreload())
+	}
 	return tx
 }
 
 func NewBuilder() Builder {
 	return &builder{}
-}
-
-type Where interface {
-	Add(query interface{}, elem ...interface{}) Where
-	GetQuery() interface{}
-	GetArgs() []interface{}
-	Next() bool
-}
-
-type Associate interface {
-	GetPreload() string
-	GetJoinsString() []string
 }
