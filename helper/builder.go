@@ -8,14 +8,14 @@ import (
 type Builder interface {
 	WithWhere(where Where) Builder
 	WithAssociate(associate associate.Associate) Builder
-	WithPreload(preload associate.Preload) Builder
+	WithPreload(preload ...associate.Preload) Builder
 	Build(db *gorm.DB) *gorm.DB
 }
 
 type options struct {
 	where     Where
 	associate associate.Associate
-	preload   associate.Preload
+	preloads  []associate.Preload
 }
 
 type builder struct {
@@ -32,8 +32,8 @@ func (b builder) WithAssociate(associate associate.Associate) Builder {
 	return &b
 }
 
-func (b builder) WithPreload(preload associate.Preload) Builder {
-	b.opts.preload = preload
+func (b builder) WithPreload(preloads ...associate.Preload) Builder {
+	b.opts.preloads = preloads
 	return &b
 }
 
@@ -58,8 +58,10 @@ func (b *builder) Build(db *gorm.DB) *gorm.DB {
 		}
 	}
 
-	if b.opts.preload != nil {
-		tx.Preload(b.opts.preload.GetPreload(), b.opts.preload.GetArgs()...)
+	if len(b.opts.preloads) != 0 {
+		for _, preload := range b.opts.preloads {
+			tx.Preload(preload.GetPreload(), preload.GetArgs()...)
+		}
 	}
 	return tx
 }
