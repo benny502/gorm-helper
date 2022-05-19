@@ -95,6 +95,10 @@ func getStructRelateObject(src schema.Tabler, target string, stat *joinStatement
 				resultType = resultType.Elem()
 			}
 
+			if resultType.Kind() == reflect.Slice {
+				resultType = resultType.Elem()
+			}
+
 			if primary, ok := getGormTag(result, "foreignKey"); ok {
 				stat.Primary = primary
 				if primaryField, ok := reflectType.FieldByName(primary); ok {

@@ -71,6 +71,7 @@ type Team struct {
 	IsHide              int       `gorm:"column:isHide;type:tinyint(4)" json:"isHide"`                                 // RH是否隐藏信息0 否 1是
 	PermissionOn        int       `gorm:"column:permissionOn;type:tinyint(4);default:0" json:"permissionOn"`           // 0 关闭权限 1 开启权限
 	PermissionChanged   int       `gorm:"column:permissionChanged;type:tinyint(4);default:0" json:"permissionChanged"` // 1 权限被修改
+	TeamUser            []TeamUser
 }
 
 func (m *Team) TableName() string {
