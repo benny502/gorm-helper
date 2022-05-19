@@ -89,6 +89,12 @@ func getStructRelateObject(src schema.Tabler, target string, stat *joinStatement
 	if reflectType.Kind() == reflect.Struct {
 		stat.ClassName = reflectType.Name()
 		if result, ok := reflectType.FieldByName(target); ok {
+
+			resultType := result.Type
+			if resultType.Kind() == reflect.Ptr {
+				resultType = resultType.Elem()
+			}
+
 			if primary, ok := getGormTag(result, "foreignKey"); ok {
 				stat.Primary = primary
 				if primaryField, ok := reflectType.FieldByName(primary); ok {
@@ -105,13 +111,13 @@ func getStructRelateObject(src schema.Tabler, target string, stat *joinStatement
 				stat.Foreign = fmt.Sprintf("%s%s", stat.ClassName, stat.Primary)
 			}
 
-			if foreignField, ok := result.Type.FieldByName(stat.Foreign); ok {
+			if foreignField, ok := resultType.FieldByName(stat.Foreign); ok {
 				if foreignName, ok := getGormTag(foreignField, "column"); ok {
 					stat.ForeignField = foreignName
 				}
 			}
 
-			if obj, ok := reflect.New(result.Type).Interface().(schema.Tabler); ok {
+			if obj, ok := reflect.New(resultType).Interface().(schema.Tabler); ok {
 				stat.ForeignTable = obj.TableName()
 				return obj, true
 			}
