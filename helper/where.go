@@ -5,6 +5,7 @@ type Where interface {
 	GetQuery() interface{}
 	GetArgs() []interface{}
 	Next() bool
+	Rewind()
 }
 
 type condition struct {
@@ -36,6 +37,10 @@ func (w *where) Add(query interface{}, elem ...interface{}) Where {
 		args:  elem,
 	})
 	return w
+}
+
+func (w *where) Rewind() {
+	w.index = -1
 }
 
 func NewWhere() Where {

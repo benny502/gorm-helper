@@ -48,6 +48,7 @@ func (b *builder) Build(db *gorm.DB) *gorm.DB {
 				tx.Where(b.opts.where.GetQuery())
 			}
 		}
+		b.opts.where.Rewind()
 	}
 
 	if b.opts.associate != nil {
