@@ -1,7 +1,6 @@
 package helper
 
 type Where interface {
-	Add(query interface{}, elem ...interface{}) Where
 	GetQuery() interface{}
 	GetArgs() []interface{}
 	Next() bool
@@ -43,7 +42,7 @@ func (w *where) Rewind() {
 	w.index = -1
 }
 
-func NewWhere() Where {
+func NewWhere() *where {
 	return &where{
 		index: -1,
 		con:   []*condition{},
