@@ -16,6 +16,9 @@ type options struct {
 	where     Where
 	associate associate.Associate
 	preloads  []associate.Preload
+	group     Group
+	having    []Having
+	field     []Select
 }
 
 type builder struct {
@@ -35,6 +38,19 @@ func (b builder) WithAssociate(associate associate.Associate) Builder {
 func (b builder) WithPreload(preloads ...associate.Preload) Builder {
 	b.opts.preloads = preloads
 	return &b
+}
+
+func (b builder) WithGroup(group Group) Builder {
+	b.opts.group = group
+	return &b
+}
+
+func (b builder) WithHaving(having ...Having) {
+	b.opts.having = having
+}
+
+func (b builder) WithSelect(field ...Select) {
+	b.opts.field = field
 }
 
 func (b *builder) Build(db *gorm.DB) *gorm.DB {
@@ -59,9 +75,25 @@ func (b *builder) Build(db *gorm.DB) *gorm.DB {
 		}
 	}
 
-	if len(b.opts.preloads) != 0 {
+	if len(b.opts.preloads) > 0 {
 		for _, preload := range b.opts.preloads {
 			tx.Preload(preload.GetPreload(), preload.GetArgs()...)
+		}
+	}
+
+	if b.opts.group != nil {
+		tx.Group(b.opts.group.GetGroup())
+	}
+
+	if len(b.opts.having) > 0 {
+		for _, having := range b.opts.having {
+			tx.Having(having.GetQuery(), having.GetArgs()...)
+		}
+	}
+
+	if len(b.opts.field) > 0 {
+		for _, field := range b.opts.field {
+			tx.Select(field.GetQuery(), field.GetArgs()...)
 		}
 	}
 	return tx
