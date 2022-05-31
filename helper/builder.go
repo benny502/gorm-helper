@@ -9,6 +9,9 @@ type Builder interface {
 	WithWhere(where Where) Builder
 	WithAssociate(associate associate.Associate) Builder
 	WithPreload(preload ...associate.Preload) Builder
+	WithHaving(having ...Having) Builder
+	WithSelect(field ...Select) Builder
+	WithGroup(group Group) Builder
 	Build(db *gorm.DB) *gorm.DB
 }
 
@@ -45,12 +48,14 @@ func (b builder) WithGroup(group Group) Builder {
 	return &b
 }
 
-func (b builder) WithHaving(having ...Having) {
+func (b builder) WithHaving(having ...Having) Builder {
 	b.opts.having = having
+	return &b
 }
 
-func (b builder) WithSelect(field ...Select) {
+func (b builder) WithSelect(field ...Select) Builder {
 	b.opts.field = field
+	return &b
 }
 
 func (b *builder) Build(db *gorm.DB) *gorm.DB {
