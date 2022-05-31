@@ -10,6 +10,14 @@ type field struct {
 	args  []interface{}
 }
 
+func (f *field) GetQuery() interface{} {
+	return f.query
+}
+
+func (f *field) GetArgs() []interface{} {
+	return f.args
+}
+
 func NewSelect(query interface{}, args ...interface{}) *field {
 	return &field{
 		query: query,
