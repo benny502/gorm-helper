@@ -41,37 +41,37 @@ func (m *User) TableName() string {
 }
 
 type Team struct {
-	Id                  int64     `gorm:"column:id;type:bigint(20);primary_key;AUTO_INCREMENT" json:"id"`
-	Name                string    `gorm:"column:name;type:varchar(255)" json:"name"`
-	CreatedAt           time.Time `gorm:"column:createdAt;type:datetime" json:"createdAt"`
-	UpdatedAt           time.Time `gorm:"column:updatedAt;type:datetime" json:"updatedAt"`
-	TeamCode            string    `gorm:"column:teamCode;type:varchar(255)" json:"teamCode"`
-	ExpireTime          time.Time `gorm:"column:expireTime;type:datetime" json:"expireTime"`
-	Type                int       `gorm:"column:type;type:tinyint(4);default:0" json:"type"`           // 0 基础版 1 高级版 2尊享版  3HY版 4 HY(rh)
-	IsTrial             int       `gorm:"column:isTrial;type:tinyint(4);default:0" json:"isTrial"`     // 0 否 1 是
-	ValidityPeriod      int       `gorm:"column:validityPeriod;type:tinyint(4)" json:"validityPeriod"` // 1 14天 2 一个月 3三个月 4 一年 5 两年 6三年 7四年 8五年 9自定义
-	Capacity            int       `gorm:"column:capacity;type:tinyint(4)" json:"capacity"`             // 容量 1 1G 2 2G 3 10G 4 20G 5 50G 6 100G 7 150G 8 200G 9 300G
-	IsRH                int       `gorm:"column:isRH;type:tinyint(4);default:0;NOT NULL" json:"isRH"`
-	ValidityPeriodStart time.Time `gorm:"column:validityPeriodStart;type:datetime" json:"validityPeriodStart"`
-	ValidityPeriodEnd   time.Time `gorm:"column:validityPeriodEnd;type:datetime" json:"validityPeriodEnd"`
-	Discount            int       `gorm:"column:discount;type:tinyint(4)" json:"discount"`                  // 折扣
-	DiscountValue       int       `gorm:"column:discountValue;type:int(11)" json:"discountValue"`           // 折扣差额
-	VersionLevelTotal   int       `gorm:"column:versionLevelTotal;type:int(11)" json:"versionLevelTotal"`   // 版本小计
-	CapacityAdditional  int       `gorm:"column:capacityAdditional;type:int(11)" json:"capacityAdditional"` // 附加容量
-	CapacityTotal       int       `gorm:"column:capacityTotal;type:int(11)" json:"capacityTotal"`           // 容量小计
-	Seats               int       `gorm:"column:seats;type:tinyint(4)" json:"seats"`                        // 席位 1 1人 2 10人 3 20人 4 50人 5 100人 6 150人 7 200人 8
-	SeatsAdditional     int       `gorm:"column:seatsAdditional;type:int(11)" json:"seatsAdditional"`       // 附加席位
-	SeatsTotal          int       `gorm:"column:seatsTotal;type:int(11)" json:"seatsTotal"`                 // 席位小计
-	Permission          string    `gorm:"column:permission;type:text" json:"permission"`                    // 权限
-	CapacityValue       int       `gorm:"column:capacityValue;type:int(11)" json:"capacityValue"`           // 总容量
-	SeatsValue          int       `gorm:"column:seatsValue;type:int(11)" json:"seatsValue"`                 // 总座位数
-	HYType              int       `gorm:"column:HYType;type:tinyint(4);default:1" json:"HYType"`            // 1 正式（免费） 2 正式（RH）
-	RHHidden            string    `gorm:"column:RHHidden;type:varchar(255)" json:"RHHidden"`
-	DistributionAt      time.Time `gorm:"column:distributionAt;type:datetime" json:"distributionAt"`
-	IsHide              int       `gorm:"column:isHide;type:tinyint(4)" json:"isHide"`                                 // RH是否隐藏信息0 否 1是
-	PermissionOn        int       `gorm:"column:permissionOn;type:tinyint(4);default:0" json:"permissionOn"`           // 0 关闭权限 1 开启权限
-	PermissionChanged   int       `gorm:"column:permissionChanged;type:tinyint(4);default:0" json:"permissionChanged"` // 1 权限被修改
-	TeamUser            []TeamUser
+	Id                  int64      `gorm:"column:id;type:bigint(20);primary_key;AUTO_INCREMENT" json:"id"`
+	Name                string     `gorm:"column:name;type:varchar(255)" json:"name"`
+	CreatedAt           time.Time  `gorm:"column:createdAt;type:datetime" json:"createdAt"`
+	UpdatedAt           time.Time  `gorm:"column:updatedAt;type:datetime" json:"updatedAt"`
+	TeamCode            string     `gorm:"column:teamCode;type:varchar(255)" json:"teamCode"`
+	ExpireTime          time.Time  `gorm:"column:expireTime;type:datetime" json:"expireTime"`
+	Type                int        `gorm:"column:type;type:tinyint(4);default:0" json:"type"`           // 0 基础版 1 高级版 2尊享版  3HY版 4 HY(rh)
+	IsTrial             int        `gorm:"column:isTrial;type:tinyint(4);default:0" json:"isTrial"`     // 0 否 1 是
+	ValidityPeriod      int        `gorm:"column:validityPeriod;type:tinyint(4)" json:"validityPeriod"` // 1 14天 2 一个月 3三个月 4 一年 5 两年 6三年 7四年 8五年 9自定义
+	Capacity            int        `gorm:"column:capacity;type:tinyint(4)" json:"capacity"`             // 容量 1 1G 2 2G 3 10G 4 20G 5 50G 6 100G 7 150G 8 200G 9 300G
+	IsRH                int        `gorm:"column:isRH;type:tinyint(4);default:0;NOT NULL" json:"isRH"`
+	ValidityPeriodStart time.Time  `gorm:"column:validityPeriodStart;type:datetime" json:"validityPeriodStart"`
+	ValidityPeriodEnd   time.Time  `gorm:"column:validityPeriodEnd;type:datetime" json:"validityPeriodEnd"`
+	Discount            int        `gorm:"column:discount;type:tinyint(4)" json:"discount"`                  // 折扣
+	DiscountValue       int        `gorm:"column:discountValue;type:int(11)" json:"discountValue"`           // 折扣差额
+	VersionLevelTotal   int        `gorm:"column:versionLevelTotal;type:int(11)" json:"versionLevelTotal"`   // 版本小计
+	CapacityAdditional  int        `gorm:"column:capacityAdditional;type:int(11)" json:"capacityAdditional"` // 附加容量
+	CapacityTotal       int        `gorm:"column:capacityTotal;type:int(11)" json:"capacityTotal"`           // 容量小计
+	Seats               int        `gorm:"column:seats;type:tinyint(4)" json:"seats"`                        // 席位 1 1人 2 10人 3 20人 4 50人 5 100人 6 150人 7 200人 8
+	SeatsAdditional     int        `gorm:"column:seatsAdditional;type:int(11)" json:"seatsAdditional"`       // 附加席位
+	SeatsTotal          int        `gorm:"column:seatsTotal;type:int(11)" json:"seatsTotal"`                 // 席位小计
+	Permission          string     `gorm:"column:permission;type:text" json:"permission"`                    // 权限
+	CapacityValue       int        `gorm:"column:capacityValue;type:int(11)" json:"capacityValue"`           // 总容量
+	SeatsValue          int        `gorm:"column:seatsValue;type:int(11)" json:"seatsValue"`                 // 总座位数
+	HYType              int        `gorm:"column:HYType;type:tinyint(4);default:1" json:"HYType"`            // 1 正式（免费） 2 正式（RH）
+	RHHidden            string     `gorm:"column:RHHidden;type:varchar(255)" json:"RHHidden"`
+	DistributionAt      time.Time  `gorm:"column:distributionAt;type:datetime" json:"distributionAt"`
+	IsHide              int        `gorm:"column:isHide;type:tinyint(4)" json:"isHide"`                                 // RH是否隐藏信息0 否 1是
+	PermissionOn        int        `gorm:"column:permissionOn;type:tinyint(4);default:0" json:"permissionOn"`           // 0 关闭权限 1 开启权限
+	PermissionChanged   int        `gorm:"column:permissionChanged;type:tinyint(4);default:0" json:"permissionChanged"` // 1 权限被修改
+	TeamUser            []TeamUser `gorm:"foreignKey:TeamId;references:Id"`
 }
 
 func (m *Team) TableName() string {

@@ -97,22 +97,38 @@ func getStructRelateObject(src schema.Tabler, target string, stat *joinStatement
 
 			if resultType.Kind() == reflect.Slice {
 				resultType = resultType.Elem()
-			}
 
-			if primary, ok := getGormTag(result, "foreignKey"); ok {
-				stat.Primary = primary
-				if primaryField, ok := reflectType.FieldByName(primary); ok {
-					if primaryName, ok := getGormTag(primaryField, "column"); ok {
-						stat.PrimaryField = primaryName
+				if primary, ok := getGormTag(result, "references"); ok {
+					stat.Primary = primary
+					if primaryField, ok := reflectType.FieldByName(primary); ok {
+						if primaryName, ok := getGormTag(primaryField, "column"); ok {
+							stat.PrimaryField = primaryName
+						}
 					}
 				}
-			}
 
-			if reference, ok := getGormTag(result, "references"); ok {
-				stat.Foreign = reference
+				if reference, ok := getGormTag(result, "foreignKey"); ok {
+					stat.Foreign = reference
+				} else {
+					//默认用关联表的类名+Id做引用
+					stat.Foreign = fmt.Sprintf("%s%s", stat.ClassName, stat.Primary)
+				}
 			} else {
-				//默认用关联表的类名+Id做引用
-				stat.Foreign = fmt.Sprintf("%s%s", stat.ClassName, stat.Primary)
+				if primary, ok := getGormTag(result, "foreignKey"); ok {
+					stat.Primary = primary
+					if primaryField, ok := reflectType.FieldByName(primary); ok {
+						if primaryName, ok := getGormTag(primaryField, "column"); ok {
+							stat.PrimaryField = primaryName
+						}
+					}
+				}
+
+				if reference, ok := getGormTag(result, "references"); ok {
+					stat.Foreign = reference
+				} else {
+					//默认用关联表的类名+Id做引用
+					stat.Foreign = fmt.Sprintf("%s%s", stat.ClassName, stat.Primary)
+				}
 			}
 
 			if foreignField, ok := resultType.FieldByName(stat.Foreign); ok {
